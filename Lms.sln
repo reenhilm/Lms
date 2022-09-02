@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lms.Api", "Lms.Api\Lms.Api.csproj", "{EE0C8C51-AD3F-4152-BBB1-2267519D8286}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lms.Api", "Lms.Api\Lms.Api.csproj", "{EE0C8C51-AD3F-4152-BBB1-2267519D8286}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lms.Core", "Lms.Core\Lms.Core.csproj", "{F98DD310-A4DA-4CCE-AFCB-BABAF9DE57A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lms.Core", "Lms.Core\Lms.Core.csproj", "{F98DD310-A4DA-4CCE-AFCB-BABAF9DE57A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lms.Data", "Lms.Data\Lms.Data.csproj", "{12019A81-A87A-46F7-8DD3-96A0976F01C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lms.Data", "Lms.Data\Lms.Data.csproj", "{12019A81-A87A-46F7-8DD3-96A0976F01C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lms.Common", "Lms.Common\Lms.Common.csproj", "{2A95E286-D46B-416D-ACFA-A40B9365212C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{12019A81-A87A-46F7-8DD3-96A0976F01C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12019A81-A87A-46F7-8DD3-96A0976F01C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12019A81-A87A-46F7-8DD3-96A0976F01C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A95E286-D46B-416D-ACFA-A40B9365212C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A95E286-D46B-416D-ACFA-A40B9365212C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A95E286-D46B-416D-ACFA-A40B9365212C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A95E286-D46B-416D-ACFA-A40B9365212C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

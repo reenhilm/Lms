@@ -7,47 +7,45 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
 using Lms.Data.Data;
+using Lms.Core.Repositories;
+using AutoMapper;
+using Lms.Api.Dto;
 
 namespace Lms.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Modules")]
     [ApiController]
     public class ModulesController : ControllerBase
     {
-        private readonly LmsApiContext _context;
+        private readonly IUoW uow;
+        private readonly IMapper mapper;
 
-        public ModulesController(LmsApiContext context)
+        public ModulesController(IUoW uow, IMapper mapper)
         {
-            _context = context;
+            this.uow = uow;
+            this.mapper = mapper;
         }
 
         // GET: api/Modules
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Module>>> GetModule()
+        public async Task<ActionResult<IEnumerable<ModuleDto>>> GetModules()
         {
-          if (_context.Module == null)
-          {
-              return NotFound();
-          }
-            return await _context.Module.ToListAsync();
+            var modules = await uow.ModuleRepository.GetAllModules();
+            var dto = mapper.Map<IEnumerable<ModuleDto>>(modules);
+            return Ok(dto);
         }
 
         // GET: api/Modules/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Module>> GetModule(int id)
+        public async Task<ActionResult<ModuleDto>> GetModule(int id)
         {
-          if (_context.Module == null)
-          {
-              return NotFound();
-          }
-            var @module = await _context.Module.FindAsync(id);
-
+            var @module = await uow.ModuleRepository.FindAsync(id);
+            var dto = mapper.Map<ModuleDto>(@module);
             if (@module == null)
             {
                 return NotFound();
             }
-
-            return @module;
+            return Ok(dto);
         }
 
         // PUT: api/Modules/5
@@ -60,15 +58,15 @@ namespace Lms.Api.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(@module).State = EntityState.Modified;
+            uow.ModuleRepository.Update(module);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await uow.CompleteAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ModuleExists(id))
+                if (!await ModuleExists(id))
                 {
                     return NotFound();
                 }
@@ -84,41 +82,34 @@ namespace Lms.Api.Controllers
         // POST: api/Modules
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Module>> PostModule(Module @module)
+        public async Task<ActionResult<ModuleDto>> PostModule(Module @module)
         {
-          if (_context.Module == null)
-          {
-              return Problem("Entity set 'LmsApiContext.Module'  is null.");
-          }
-            _context.Module.Add(@module);
-            await _context.SaveChangesAsync();
+            uow.ModuleRepository.Add(@module);
+            await uow.CompleteAsync();
+            var dto = mapper.Map<ModuleDto>(@module);
 
-            return CreatedAtAction("GetModule", new { id = @module.Id }, @module);
+            return CreatedAtAction("GetModule", new { id = @module.Id }, dto);
         }
 
         // DELETE: api/Modules/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteModule(int id)
         {
-            if (_context.Module == null)
-            {
-                return NotFound();
-            }
-            var @module = await _context.Module.FindAsync(id);
+            var @module = await uow.ModuleRepository.FindAsync(id);
             if (@module == null)
             {
                 return NotFound();
             }
 
-            _context.Module.Remove(@module);
-            await _context.SaveChangesAsync();
+            uow.ModuleRepository.Remove(@module);
+            await uow.CompleteAsync();
 
             return NoContent();
         }
 
-        private bool ModuleExists(int id)
+        private async Task<bool> ModuleExists(int id)
         {
-            return (_context.Module?.Any(e => e.Id == id)).GetValueOrDefault();
+            return await uow.ModuleRepository.AnyAsync(id);
         }
     }
 }

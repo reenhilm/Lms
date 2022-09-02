@@ -1,7 +1,9 @@
 ﻿using Lms.Core.Entities;
 using Lms.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +22,9 @@ namespace Lms.Data.Data.Repositories
             db.Add(course);
         }
 
-        public Task<bool> AnyAsync(int? id)
+        public async Task<bool> AnyAsync(int? id)
         {
-            throw new NotImplementedException();
+            return await db.Course.AnyAsync(c => c.Id == id);
         }
 
         public async Task<Course> FindAsync(int? id)
@@ -30,24 +32,24 @@ namespace Lms.Data.Data.Repositories
             return await db.Course.FindAsync(id);
         }
 
-        public Task<IEnumerable<Course>> GetAllCourses()
+        public async Task<IEnumerable<Course>> GetAllCourses()
         {
-            throw new NotImplementedException();
+            return await db.Course.ToListAsync();
         }
 
-        public Task<Course> GetCourse(int? id)
+        public async Task<Course> GetCourse(int? id)
         {
-            throw new NotImplementedException();
+            return await db.Course.FirstAsync(c => c.Id == id);
         }
 
         public void Remove(Course course)
         {
-            throw new NotImplementedException();
+            db.Course.Remove(course);
         }
 
         public void Update(Course course)
         {
-            throw new NotImplementedException();
+            db.Entry(course).State = EntityState.Modified;
         }
     }
 }

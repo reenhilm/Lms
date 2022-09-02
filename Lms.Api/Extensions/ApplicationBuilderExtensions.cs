@@ -17,6 +17,7 @@ namespace Lms.Api.Extensions
                 uow.EnsureDeleted();
                 uow.Migrate();
 
+#pragma warning disable CS0168 // Variable is declared but never used
                 try
                 {
                     await SeedData.InitAsync(uow);
@@ -25,6 +26,7 @@ namespace Lms.Api.Extensions
                 {
                     throw;
                 }
+#pragma warning restore CS0168 // Variable is declared but never used
             }
             return app;
         }

@@ -15,6 +15,7 @@ builder.Services.AddScoped<IUoW, UoW>();
 builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
     .AddNewtonsoftJson()
     .AddXmlDataContractSerializerFormatters();
+builder.Services.AddAutoMapper(typeof(LmsMappings));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
