@@ -19,7 +19,7 @@ namespace Lms.Data.Data.Repositories
 
         public void Add(Module module)
         {
-            db.AddAsync(module);
+            db.Add(module);
         }
 
         public async Task<bool> AnyAsync(int? id)
