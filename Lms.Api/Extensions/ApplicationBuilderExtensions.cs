@@ -12,10 +12,10 @@ namespace Lms.Api.Extensions
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
-                var uow = serviceProvider.GetRequiredService<IUoW>();
-
-                //uow.EnsureDeleted();
-                //uow.Migrate();
+                IDevUoW uow = (IDevUoW)(serviceProvider.GetRequiredService<IUoW>());
+                
+                uow.EnsureDeleted();
+                uow.Migrate();
 
                 try
                 {

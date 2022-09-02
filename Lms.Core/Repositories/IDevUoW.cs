@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Lms.Core.Repositories
 {
-    public interface IUoW
+    public interface IDevUoW : IUoW
     {
-        ICourseRepository CourseRepository { get; }
-        IModuleRepository ModuleRepository { get; }
-
-        Task CompleteAsync();
+        void EnsureDeleted();
+        void Migrate();
     }
 }

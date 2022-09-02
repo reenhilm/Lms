@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lms.Data.Data.Repositories
 {
-    public class UoW : IUoW
+    public class UoW : IDevUoW, IUoW
     {
         public ICourseRepository CourseRepository { get; }
 
