@@ -10,6 +10,7 @@ using Lms.Data.Data;
 using Lms.Core.Repositories;
 using AutoMapper;
 using Lms.Api.Dto;
+using Lms.Common.Dto;
 
 namespace Lms.Api.Controllers
 {
@@ -82,14 +83,14 @@ namespace Lms.Api.Controllers
         // POST: api/Modules
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ModuleDto>> PostModule(Module insertModule)
+        public async Task<ActionResult<ModuleInsertDto>> PostModule(ModuleInsertDto insertModule)
         {
             var enitityModule = mapper.Map<Module>(insertModule);
             uow.ModuleRepository.Add(enitityModule);
             await uow.CompleteAsync();
 
-            //halvonödig mappning tillbaka? skulle vara om ModuleRepository ändrat mer än Id
-            var dto = mapper.Map<ModuleDto>(enitityModule);
+            //halvonödig mappning tillbaka? kan bara skicka tillbaka insertModule, men skulle kunna vara om ModuleRepository ändrar mer än Id i framtiden
+            var dto = mapper.Map<ModuleInsertDto>(enitityModule);
 
             return CreatedAtAction("GetModule", new { id = enitityModule.Id }, dto);
         }

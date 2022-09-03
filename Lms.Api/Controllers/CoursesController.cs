@@ -90,7 +90,7 @@ namespace Lms.Api.Controllers
             uow.CourseRepository.Add(enitityCourse);
             await uow.CompleteAsync();
 
-            //halvonödig mappning tillbaka? skulle vara om CourseRepository ändrat mer än Id
+            //halvonödig mappning tillbaka? kan bara skicka tillbaka insertCourse, men skulle kunna vara om CourseRepository ändrar mer än Id i framtiden
             var dto = mapper.Map<CourseDto>(enitityCourse);
 
             return CreatedAtAction("GetCourse", new { id = enitityCourse.Id }, dto);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lms.Api.Dto;
+using Lms.Common.Dto;
 using Lms.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ namespace Lms.Data.Data
         public LmsMappings()
         {
             CreateMap<Course, CourseDto>().ReverseMap();
-
             CreateMap<Module, ModuleDto>().ReverseMap();
+            CreateMap<Module, ModuleInsertDto>().ReverseMap();            
         }
     }
 }

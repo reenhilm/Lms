@@ -6,8 +6,10 @@ using Lms.Core.Repositories;
 using Lms.Data.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<LmsApiContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LmsApiContext") ?? throw new InvalidOperationException("Connection string 'LmsApiContext' not found.")));
+builder.Services.AddDbContext<LmsApiContext>(options => { 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LmsApiContext") ?? throw new InvalidOperationException("Connection string 'LmsApiContext' not found."));
+    /* options.EnableSensitiveDataLogging(); */
+    });
 
 // Add services to the container.
 builder.Services.AddScoped<IUoW, UoW>();
