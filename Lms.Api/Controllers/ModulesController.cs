@@ -82,13 +82,16 @@ namespace Lms.Api.Controllers
         // POST: api/Modules
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ModuleDto>> PostModule(Module @module)
+        public async Task<ActionResult<ModuleDto>> PostModule(Module insertModule)
         {
-            uow.ModuleRepository.Add(@module);
+            var enitityModule = mapper.Map<Module>(insertModule);
+            uow.ModuleRepository.Add(enitityModule);
             await uow.CompleteAsync();
-            var dto = mapper.Map<ModuleDto>(@module);
 
-            return CreatedAtAction("GetModule", new { id = @module.Id }, dto);
+            //halvonödig mappning tillbaka? skulle vara om ModuleRepository ändrat mer än Id
+            var dto = mapper.Map<ModuleDto>(enitityModule);
+
+            return CreatedAtAction("GetModule", new { id = enitityModule.Id }, dto);
         }
 
         // DELETE: api/Modules/5

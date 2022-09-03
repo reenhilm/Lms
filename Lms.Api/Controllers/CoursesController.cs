@@ -84,13 +84,16 @@ namespace Lms.Api.Controllers
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CourseDto>> PostCourse(Course course)
+        public async Task<ActionResult<CourseDto>> PostCourse(CourseDto insertCourse)
         {
-            uow.CourseRepository.Add(course);
+            var enitityCourse = mapper.Map<Course>(insertCourse);
+            uow.CourseRepository.Add(enitityCourse);
             await uow.CompleteAsync();
-            var dto = mapper.Map<CourseDto>(course);
 
-            return CreatedAtAction("GetCourse", new { id = course.Id }, dto);
+            //halvonödig mappning tillbaka? skulle vara om CourseRepository ändrat mer än Id
+            var dto = mapper.Map<CourseDto>(enitityCourse);
+
+            return CreatedAtAction("GetCourse", new { id = enitityCourse.Id }, dto);
         }
 
         // DELETE: api/Courses/5
