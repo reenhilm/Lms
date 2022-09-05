@@ -12,6 +12,7 @@ using Lms.Api.Dto;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Lms.Data.Data.Repositories;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Lms.Api.Controllers
 {
@@ -53,13 +54,13 @@ namespace Lms.Api.Controllers
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<ActionResult<CourseDto>> PutCourse(int id, Course course)
+        public async Task<ActionResult<CourseDto>> PutCourse(int id, CourseDto courseDto)
         {
-            if (id != course.Id)
+            if (id != courseDto.Id)
             {
                 return BadRequest();
             }
-
+            var course = mapper.Map<Course>(courseDto);
             uow.CourseRepository.Update(course);
 
             CourseDto dto;
@@ -81,6 +82,51 @@ namespace Lms.Api.Controllers
             }
 
             return Ok(dto);
+        }
+
+        // PATCH: api/Courses/5
+        [HttpPatch("{courseId}")]
+        public async Task<ActionResult<CourseDto>> PatchCourse(int courseId, JsonPatchDocument<CourseDto> patchDocument)
+        {
+            var courseEntity = await uow.CourseRepository.FindAsync(courseId);
+            if (courseEntity is null)
+            {
+                return BadRequest();
+            }
+
+            var dto = mapper.Map<CourseDto>(courseEntity);
+
+            patchDocument.ApplyTo(dto, ModelState);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!TryValidateModel(dto))
+                return BadRequest(ModelState);
+
+            var patchedEntity = mapper.Map<Course>(dto);
+
+            uow.CourseRepository.Update(patchedEntity);
+
+            CourseDto dtoRet;
+            try
+            {
+                await uow.CompleteAsync();
+                dtoRet = mapper.Map<CourseDto>(patchedEntity);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await CourseExists(courseId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok(dtoRet);
         }
 
         // POST: api/Courses

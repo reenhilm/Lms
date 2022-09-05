@@ -11,6 +11,7 @@ using Lms.Core.Repositories;
 using AutoMapper;
 using Lms.Api.Dto;
 using Lms.Common.Dto;
+using Lms.Data.Data.Repositories;
 
 namespace Lms.Api.Controllers
 {
@@ -52,20 +53,21 @@ namespace Lms.Api.Controllers
         // PUT: api/Modules/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<ActionResult<ModuleDto>> PutModule(int id, Module @module)
+        public async Task<ActionResult<ModuleDto>> PutModule(int id, ModuleDto moduleDto)
         {
-            if (id != @module.Id)
+            if (id != moduleDto.Id)
                 return BadRequest();
 
-            if(await uow.CourseRepository.FindAsync(@module.CourseId) is null)
-                return NotFound();
+            var moduleEntity = await uow.ModuleRepository.FindAsync(moduleDto.Id);
+            var updateEntity = mapper.Map<Module>(moduleDto);
+            updateEntity.CourseId = moduleEntity.CourseId;
 
-            uow.ModuleRepository.Update(module);
+            uow.ModuleRepository.Update(updateEntity);
             ModuleDto dto;
             try
             {
                 await uow.CompleteAsync();
-                dto = mapper.Map<ModuleDto>(@module);
+                dto = mapper.Map<ModuleDto>(updateEntity);
 
             }
             catch (DbUpdateConcurrencyException)
