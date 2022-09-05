@@ -53,7 +53,7 @@ namespace Lms.Api.Controllers
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCourse(int id, Course course)
+        public async Task<ActionResult<CourseDto>> PutCourse(int id, Course course)
         {
             if (id != course.Id)
             {
@@ -62,9 +62,11 @@ namespace Lms.Api.Controllers
 
             uow.CourseRepository.Update(course);
 
+            CourseDto dto;
             try
             {
                 await uow.CompleteAsync();
+                dto = mapper.Map<CourseDto>(course);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,7 +80,7 @@ namespace Lms.Api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(dto);
         }
 
         // POST: api/Courses

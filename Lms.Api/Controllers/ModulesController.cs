@@ -52,18 +52,21 @@ namespace Lms.Api.Controllers
         // PUT: api/Modules/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutModule(int id, Module @module)
+        public async Task<ActionResult<ModuleDto>> PutModule(int id, Module @module)
         {
             if (id != @module.Id)
-            {
                 return BadRequest();
-            }
+
+            if(await uow.CourseRepository.FindAsync(@module.CourseId) is null)
+                return NotFound();
 
             uow.ModuleRepository.Update(module);
-
+            ModuleDto dto;
             try
             {
                 await uow.CompleteAsync();
+                dto = mapper.Map<ModuleDto>(@module);
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -77,7 +80,7 @@ namespace Lms.Api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(dto);
         }
 
         // POST: api/Modules
@@ -85,6 +88,9 @@ namespace Lms.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ModuleInsertDto>> PostModule(ModuleInsertDto insertModule)
         {
+            if (await uow.CourseRepository.FindAsync(insertModule.CourseId) is null)
+                return NotFound();
+
             var enitityModule = mapper.Map<Module>(insertModule);
             uow.ModuleRepository.Add(enitityModule);
             await uow.CompleteAsync();
