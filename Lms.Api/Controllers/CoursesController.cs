@@ -104,15 +104,11 @@ namespace Lms.Api.Controllers
             if (!TryValidateModel(dto))
                 return BadRequest(ModelState);
 
-            var patchedEntity = mapper.Map<Course>(dto);
+            mapper.Map(dto, courseEntity);           
 
-            uow.CourseRepository.Update(patchedEntity);
-
-            CourseDto dtoRet;
             try
             {
                 await uow.CompleteAsync();
-                dtoRet = mapper.Map<CourseDto>(patchedEntity);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -126,7 +122,7 @@ namespace Lms.Api.Controllers
                 }
             }
 
-            return Ok(dtoRet);
+            return Ok(dto);
         }
 
         // POST: api/Courses
