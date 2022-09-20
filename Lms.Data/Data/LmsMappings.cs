@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Lms.Api.Dto;
 using Lms.Common.Dto;
 using Lms.Core.Entities;
 using System;

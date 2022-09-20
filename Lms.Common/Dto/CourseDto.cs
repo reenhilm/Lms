@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Lms.Api.Dto
+namespace Lms.Common.Dto
 {
     public class CourseDto
     {
@@ -9,7 +9,9 @@ namespace Lms.Api.Dto
         [StringLength(50)]
         public string Title { get; set; } = default!;
         public DateTime StartDate { get; set; } = default!;
-        public DateTime EndDate { get
+        public DateTime EndDate
+        {
+            get
             {
                 return StartDate.AddMonths(3);
             }

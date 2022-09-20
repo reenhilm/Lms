@@ -9,7 +9,6 @@ using Lms.Core.Entities;
 using Lms.Data.Data;
 using Lms.Core.Repositories;
 using AutoMapper;
-using Lms.Api.Dto;
 using Lms.Common.Dto;
 using Lms.Data.Data.Repositories;
 

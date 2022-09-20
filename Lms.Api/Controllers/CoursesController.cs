@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
 using Lms.Data.Data;
 using Lms.Core.Repositories;
-using Lms.Api.Dto;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Lms.Data.Data.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
+using Lms.Common.Dto;
 
 namespace Lms.Api.Controllers
 {
